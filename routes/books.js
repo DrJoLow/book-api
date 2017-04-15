@@ -46,24 +46,24 @@ router.post('/create', function(req,res){
 	var db = req.db;
 	var Bookname = req.body.bookname;
 	var Bookdate = req.body.bookdate;
-	var BookEditor = req.body.bookeditor;
-	var BookFormat = req.body.bookformat;
+	var Bookprice = req.body.bookprice;
 	var BookDescription = req.body.bookdescription;
 	var BookCover = req.body.bookcover;
 	var BookGender = req.body.bookgender;
 	var BookAuthor = req.body.bookauthor;
+    var Bookeditor = req.body.bookeditor;
 	var data = {
 		"error":1,
 		"Books": ""
 	};
 
 	
-	if(!!Bookname && !!Bookdate && !!BookEditor && !!BookFormat && !!BookDescription 
-		&& !!BookCover && !!BookGender && !!BookAuthor){
+	if(!!Bookname && !!Bookdate && !!Bookeditor && !!Bookprice && !!BookDescription 
+		&& !!BookCover && !!BookGender && !!BookAuthor && !!Bookeditor){
         db.collection('books').insert({bookname:Bookname , 
-        	bookdate: Bookdate, bookeditor:BookEditor, bookformat:BookFormat,
+        	bookdate: Bookdate, bookprice:Bookprice,
         	bookdescription:BookDescription, bookcover:BookCover, bookgender: BookGender,
-        	bookauthor:BookAuthor}, function(err, result) {
+        	bookauthor:BookAuthor, bookeditor:Bookeditor}, function(err, result) {
             if(!!err){
                 data["Books"] = "Error Adding data";
             }else{
@@ -84,22 +84,23 @@ router.put('/update/:bookId', function(req, res){
     var id = req.params.bookId;
     var Bookname = req.body.bookname;
     var Bookdate = req.body.bookdate;
-    var BookEditor = req.body.bookeditor;
-    var BookFormat = req.body.bookformat;
+    var Bookprice = req.body.bookprice;
     var BookDescription = req.body.bookdescription;
     var BookCover = req.body.bookcover;
     var BookGender = req.body.bookgender;
     var BookAuthor = req.body.bookauthor;
+    var Bookeditor = req.body.bookeditor;;
 
     var db = req.db;
     var data = {
         "error" : 1,
         "Books": ""
     };
-    if(!!Bookname && !!Bookdate && !!BookEditor && !!BookFormat && !!BookDescription 
-        && !!BookCover && !!BookGender && !!BookAuthor){
+    if(!!Bookname && !!Bookdate && !!Bookeditor && !!Bookprice && !!BookDescription 
+        && !!BookCover && !!BookGender && !!BookAuthor && !!Bookeditor){
         db.collection('books').update({"_id": new ObjectId(id)}, 
-            {$set:{bookname:Bookname, bookdate: Bookdate, bookeditor:BookEditor, bookformat:BookFormat,bookdescription:BookDescription, bookcover:BookCover, bookgender:BookGender,bookauthor:BookAuthor}}, function(err, result) {
+            {$set:{bookname:Bookname, bookdate: Bookdate, bookeditor:Bookeditor, bookprice:Bookprice,bookdescription:BookDescription, 
+                bookcover:BookCover, bookgender:BookGender,bookauthor:BookAuthor,bookeditor:Bookeditor}}, function(err, result) {
             if(!!err){
                 data["Books"] = "Error Updating data";
                 console.log("second");
@@ -141,5 +142,30 @@ router.delete('/delete/:bookId',function(req,res){
     }
 });
 
+
+/* GET Search a book */
+router.get('/search/:searchTerm', function(req, res){
+    var searchTerm = req.params.searchTerm;
+    var db = req.db;
+    var data = {
+        "error" : 1,
+        "Books" : ""
+    };
+    if(!!searchTerm){
+        db.collection("books").find({ "bookname" : searchTerm}), function(err, result){
+            if(!!err){
+                data["Books"] = "No books called :" + searchTerm + "has been found";
+            }else{
+                data["errors"] = 0;
+                data["Books"] = items;
+            }
+            res.json(data);
+        }
+    }
+    else{
+        data["Books"] = "Please provide all required data";
+        res.json(data);
+    }
+})
 
 module.exports = router;
