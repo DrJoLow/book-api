@@ -46,7 +46,7 @@ router.post('/create', function(req,res){
 	var db = req.db;
 	var Bookname = req.body.bookname;
 	var Bookdate = req.body.bookdate;
-	var Bookprice = req.body.bookprice;
+	//var Bookprice = req.body.bookprice;
 	var BookDescription = req.body.bookdescription;
 	var BookCover = req.body.bookcover;
 	var BookGender = req.body.bookgender;
@@ -58,10 +58,10 @@ router.post('/create', function(req,res){
 	};
 
 	
-	if(!!Bookname && !!Bookdate && !!Bookeditor && !!Bookprice && !!BookDescription 
+	if(!!Bookname && !!Bookdate && !!Bookeditor && !!BookDescription 
 		&& !!BookCover && !!BookGender && !!BookAuthor && !!Bookeditor){
         db.collection('books').insert({bookname:Bookname , 
-        	bookdate: Bookdate, bookprice:Bookprice,
+        	bookdate: Bookdate,
         	bookdescription:BookDescription, bookcover:BookCover, bookgender: BookGender,
         	bookauthor:BookAuthor, bookeditor:Bookeditor}, function(err, result) {
             if(!!err){

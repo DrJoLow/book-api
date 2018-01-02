@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var ObjectId = require('mongodb').ObjectId;
 var mongo = require('mongoskin');
-var db = mongo.db('mongodb://localhost:27017/books', {native_parser:true});
+var db = mongo.db('mongodb://johan:190493@ds239387.mlab.com:39387/heroku_bcnd7j80', {native_parser:true});
 
 
 
