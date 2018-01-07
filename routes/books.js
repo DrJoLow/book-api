@@ -152,7 +152,7 @@ router.get('/search/:searchTerm', function(req, res){
         "Books" : ""
     };
     if(!!searchTerm){
-        db.collection("books").find({ "bookname" : searchTerm}), function(err, result){
+        db.collection("books").find({ bookname : searchTerm}), function(err, result){
             if(!!err){
                 data["Books"] = "No books called :" + searchTerm + "has been found";
             }else{
